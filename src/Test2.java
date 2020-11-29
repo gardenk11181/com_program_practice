@@ -1,3 +1,4 @@
+import java.io.*;
 import java.util.*;
 
 public class Test2 {
@@ -119,6 +120,84 @@ public class Test2 {
 
     static void lecture10() {
         System.out.println("-------------------------\nlecture10\n-------------------------");
+        // file IO
+
+        byte[] buf = { 35, 36 };
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(buf);
+        char ch = (char)(inputStream.read());
+        printOX("ByteArrayInputStream success", ch=='#');
+        inputStream.read();
+        int end = inputStream.read();
+        printOX("ByteArrayInputStream fail", end == -1);
+        try {
+            inputStream.close();
+        } catch (IOException e){}
+
+        try {
+            FileInputStream fileInputStream = new FileInputStream("/Users/gardenmini/Library/Mobile Documents/com~apple~CloudDocs/2020 Fall/Computer Programming/final_practice/data/say_hello.txt");
+            char c = (char)fileInputStream.read();
+            printOX("FileInputStream read",c=='H');
+            fileInputStream.close();
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+
+        // ByteArrayOutputStream
+        try {
+            FileOutputStream fileOutputStream = new FileOutputStream("/Users/gardenmini/Library/Mobile Documents/com~apple~CloudDocs/2020 Fall/Computer Programming/final_practice/data/file.txt");
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            byteArrayOutputStream.write(65);
+            byteArrayOutputStream.writeTo(fileOutputStream);
+            byteArrayOutputStream.flush();
+            byteArrayOutputStream.close();
+
+            BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(fileOutputStream);
+            String s = "\nWelcome!!!";
+            bufferedOutputStream.write(s.getBytes());
+            bufferedOutputStream.flush();
+            bufferedOutputStream.close();
+            fileOutputStream.close();
+
+            printOX("ByteArrayOutputStream, BufferdOutPutStream success",true);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        // FileWriter
+        try {
+            FileWriter fileWriter = new FileWriter("/Users/gardenmini/Library/Mobile Documents/com~apple~CloudDocs/2020 Fall/Computer Programming/final_practice/data/file_writer.txt");
+            fileWriter.write("fileWriter first line");
+            fileWriter.close();
+            printOX("FileWriter success",true);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // FileReader
+        try {
+            FileReader fileReader = new FileReader("/Users/gardenmini/Library/Mobile Documents/com~apple~CloudDocs/2020 Fall/Computer Programming/final_practice/data/file_writer.txt");
+            int c = fileReader.read();
+            while(c != -1) {
+                c = fileReader.read();
+            }
+            printOX("FileReader success",true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //Scanner
+        try {
+            Scanner input = new Scanner(new File("/Users/gardenmini/Library/Mobile Documents/com~apple~CloudDocs/2020 Fall/Computer Programming/final_practice/data/file_writer.txt"));
+            while(input.hasNext()) {
+                printOX("Scanner File Input success", input.nextLine().equals("fileWriter first line"));
+            }
+        } catch (Exception e) {}
+
+
+
+
+
     }
 }
 class ReverseComparator implements Comparator<String> {
